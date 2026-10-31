@@ -3,7 +3,7 @@
 A terminal dashboard for the git projects directly under `~/work/Dev` and the health of the machine they live on. It only reads: every git call runs with `--no-optional-locks`, so it never takes an index lock another tool may hold.
 
 ```text
-┌ devui · /home/akhil/work/Dev ─────────────────────────────────────────────┐
+┌ devui · ~/work/Dev ───────────────────────────────────────────────────────┐
 │/ 77% (10.7G free)  |  ~/work 23% (670.9G free)                            │
 │kernel 7.2.11-arch1-1                                                      │
 │docker size/reclaimable: images 5.361GB/28.7MB · volumes 1.041GB/845.3MB   │
