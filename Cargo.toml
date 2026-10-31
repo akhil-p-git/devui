@@ -1,0 +1,12 @@
+[package]
+name = "devui"
+version = "0.1.0"
+edition = "2024"
+description = "A terminal dashboard for the git projects under ~/work/Dev and the health of this machine"
+
+[dependencies]
+anyhow = "1.0.104"
+ratatui = "0.30.2"
+
+[dev-dependencies]
+tempfile = "3.27.0"
