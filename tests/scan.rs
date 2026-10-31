@@ -131,3 +131,26 @@ fn status_does_not_modify_the_repository() {
         .unwrap();
     assert_eq!(before, after, "scan rewrote the git index");
 }
+
+#[cfg(unix)]
+#[test]
+fn scan_never_runs_a_command_named_in_the_repository_config() {
+    use std::os::unix::fs::PermissionsExt;
+
+    let root = tempfile::tempdir().unwrap();
+    let repo = root.path().join("hostile");
+    init(&repo);
+    commit_file(&repo, "a.txt", "one");
+
+    let marker = root.path().join("ran");
+    let hook = root.path().join("hook.sh");
+    fs::write(&hook, format!("#!/bin/sh\ntouch '{}'\n", marker.display())).unwrap();
+    fs::set_permissions(&hook, fs::Permissions::from_mode(0o755)).unwrap();
+    git(&repo, &["config", "core.fsmonitor", hook.to_str().unwrap()]);
+
+    scan(root.path()).unwrap();
+    assert!(
+        !marker.exists(),
+        "git ran core.fsmonitor from the scanned repository"
+    );
+}

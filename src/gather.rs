@@ -1,5 +1,6 @@
-//! Reads the state of every git project under a root directory. Only read-only git commands run, and
-//! `--no-optional-locks` keeps `git status` from taking the index lock another tool may be holding.
+//! Reads the state of every git project under a root directory. Only read-only git commands run.
+//! `--no-optional-locks` keeps `git status` from taking the index lock another tool may be holding, and
+//! `core.fsmonitor=false` stops git from running a command that a scanned repository's own config names.
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -121,6 +122,7 @@ pub fn parse_log(text: &str) -> Vec<Commit> {
 fn git(path: &Path, args: &[&str]) -> Result<String, String> {
     let out = Command::new("git")
         .arg("--no-optional-locks")
+        .args(["-c", "core.fsmonitor=false"])
         .arg("-C")
         .arg(path)
         .args(args)
